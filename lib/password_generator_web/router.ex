@@ -21,8 +21,9 @@ defmodule PasswordGeneratorWeb.Router do
     post "/", PageController, :generate
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", PasswordGeneratorWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", PasswordGeneratorWeb do
+    pipe_through :api
+
+    post "/", PageController, :api_generate
+  end
 end
