@@ -2,10 +2,9 @@ defmodule PasswordGeneratorWeb.Api.PageController do
   use PasswordGeneratorWeb, :controller
 
   def api_generate(conn, params) do
-    length = String.to_integer(params["length"])
-    options = Map.delete(params, "length")
-    password = PassGenerator.generate(length, options)
-
-    json(conn, %{password: password})
+    case PassGenerator.generate(params) do
+      {:ok, pass} -> json(conn, %{password: pass})
+      {:error, error} -> json(conn, %{error: error})
+    end
   end
 end

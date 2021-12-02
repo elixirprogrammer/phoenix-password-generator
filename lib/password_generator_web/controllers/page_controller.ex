@@ -13,9 +13,7 @@ defmodule PasswordGeneratorWeb.PageController do
   end
 
   def generate(conn, %{"password" => password_params}, password_lengths) do
-    length = String.to_integer(password_params["length"])
-    options = Map.delete(password_params, "length")
-    password = PassGenerator.generate(length, options)
+    {:ok, password} = PassGenerator.generate(password_params)
 
     conn
     |> render(
