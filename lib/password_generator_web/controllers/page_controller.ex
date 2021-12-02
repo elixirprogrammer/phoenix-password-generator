@@ -13,7 +13,9 @@ defmodule PasswordGeneratorWeb.PageController do
   end
 
   def generate(conn, %{"password" => password_params}, password_lengths) do
-    password = get_password(password_params)
+    length = String.to_integer(password_params["length"])
+    options = Map.delete(password_params, "length")
+    password = PassGenerator.generate(length, options)
 
     conn
     |> render(
@@ -21,12 +23,6 @@ defmodule PasswordGeneratorWeb.PageController do
       password_lengths: password_lengths,
       password: password
     )
-  end
-
-  def api_generate(conn, params, _) do
-    password = get_password(params)
-
-    json(conn, %{password: password})
   end
 
   def action(conn, _) do
@@ -38,11 +34,5 @@ defmodule PasswordGeneratorWeb.PageController do
 
     args = [conn, conn.params, password_lengths]
     apply(__MODULE__, action_name(conn), args)
-  end
-
-  defp get_password(params) do
-    length = String.to_integer(params["length"])
-    options = Map.delete(params, "length")
-    PassGenerator.generate(length, options)
   end
 end
